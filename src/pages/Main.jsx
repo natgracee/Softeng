@@ -1,10 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
-import { MdOutlineAccountCircle, MdOutlineNotifications } from "react-icons/md";
+import { MdOutlineAccountCircle, MdOutlineNotifications, MdPhotoLibrary, MdQrCodeScanner } from "react-icons/md";
+import { GroupItem } from "./Groupitem";
 
 export const Main = () => {
   const location = useLocation();
   const username = location.state?.username || "Guest";
   const { newGroup } = location.state || {};
+
+  const groups = [
+    { name: "Group 1", inviteLink: "http://example.com/invite1" },
+    { name: "Group 2", inviteLink: "http://example.com/invite2" },
+    { name: "Group 3", inviteLink: "http://example.com/invite3" },
+    // Bisa ditambahkan grup lainnya
+  ];
 
   return (
     <section className="min-h-screen flex flex-col px-4 sm:px-8 md:px-16 lg:px-40">
@@ -18,8 +26,8 @@ export const Main = () => {
           <Link to="/account">
             <MdOutlineAccountCircle size={28} className="text-gray-700" />
           </Link>
-          </div>
         </div>
+      </div>
 
       {/* Welcome Section */}
       <div className="text-left mt-12 ml-4">
@@ -31,15 +39,17 @@ export const Main = () => {
       
       {/* Scan bills */}
       <div className="flex justify-center space-x-3 mb-10">
-        <button className="green-button font-semibold px-6 py-2 rounded-lg shadow">
-          Quick Scan
+        <button className="green-button font-semibold px-6 py-2 rounded-lg shadow flex items-center space-x-2">
+          <MdQrCodeScanner size={20} />
+          <span>Quick Scan</span>
         </button>
-        <button className="black-button font-semibold px-6 py-2 rounded-lg shadow">
-          Add Manually
+        <button className="black-button font-semibold px-6 py-2 rounded-lg shadow flex items-center space-x-2">
+          <MdPhotoLibrary size={20}/>
+          <span>Add Manually</span>
         </button>
       </div>
 
-      {/* New Group Created Section
+      {/* New Group Created Section */}
       {newGroup && (
         <div className="bg-green-100 p-4 rounded-lg shadow-lg mb-6">
           <h3 className="font-bold text-lg">New Group Created!</h3>
@@ -53,35 +63,30 @@ export const Main = () => {
           )}
           <p className="mt-2 text-sm text-gray-600">Invite Link: {newGroup.inviteLink}</p>
         </div>
-      )} */}
+      )}
 
-
+      {/* Group List */}
       <div className="bg-green-100 rounded-xl shadow-xl overflow-hidden p-6 mt-6 h-screen">
-      {/* Group List Header */}
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-muted-foreground text-base font-semibold">Groups List</p>
-        <Link to="/grouplist" className="text-sm text-primary hover:underline">
-          See More
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-muted-foreground text-base font-semibold">Groups List</p>
+          <Link to="/grouplist" className="text-sm text-primary hover:underline">
+            See More
+          </Link>
+        </div>
+
+        <div className="p-4 rounded-lg shadow-sm space-y-2 max-h-80 sm:max-h-[400px] lg:max-h-[500px] xl:max-h-[600px] overflow-y-auto">
+          {groups.map((group, index) => (
+            <GroupItem key={index} groupName={group.name} inviteLink={group.inviteLink} />
+          ))}
+        </div>
+
+        {/* Create Group Button */}
+        <Link to="/newgroup" className="block mt-6">
+          <button className="green-button py-2 px-6 rounded-lg mt-12">
+            Create New Group
+          </button>
         </Link>
       </div>
-
-      {/* Group List Items */}
-      <div className="p-4 rounded-lg shadow-sm space-y-2 max-h-80 sm:max-h-[400px] lg:max-h-[500px] xl:max-h-[600px] overflow-y-auto">
-        <div className="bg-white p-3 rounded-md shadow border">Group 1</div>
-        <div className="bg-white p-3 rounded-md shadow border">Group 2</div>
-        <div className="bg-white p-3 rounded-md shadow border">Group 3</div>
-        <div className="bg-white p-3 rounded-md shadow border">Group 3</div>
-        <div className="bg-white p-3 rounded-md shadow border">Group 3</div>
-      </div>
-
-      {/* Create Group Button */}
-      <Link to="/newgroup" className="block mt-6">
-        <button className="green-button py-2 px-6 rounded-lg mt-12">
-          Create New Group
-        </button>
-      </Link>
-      </div>
-      
     </section>
   );
 };
